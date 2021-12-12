@@ -1,0 +1,54 @@
+<div class="container-1 sticky-lg-top">
+    <nav class="navbar navbar-light bg-white">
+      <form action="/products" class="form-inline" method="GET">
+        <div class="row py-2">
+          <div class="col-12 col-md-2">
+            <select class="form-select" aria-label="Make" name="makeName">
+              <option selected>Make</option>
+              <% for(let m of makeList){ %>
+              <option value="<%= m.makeName %>"><%= m.makeName %></option>
+              <% } %> 
+            </select>
+          </div>
+          <div class="col-12 col-md-2">
+            <select class="form-select" aria-label="Model" name="modelName">
+              <option selected>Model</option>
+              <% for(let md of makeList[0].models){ %>
+              <option value="<%= md.modelName %>"><%= md.modelName %></option>
+              <% } %> 
+            </select>
+          </div>
+          <div class="col-12 col-md-2">
+            <select class="form-select" aria-label="Year (from)" name="year">
+              <option selected>Year (from)</option>
+              <% for(let year of yearList){ %>
+              <option value="<%= year %>"><%= year %></option>
+              <% } %> 
+            </select>
+          </div>
+          <div class="dropdown col-12 col-md order-md-0">
+            <button class="btn btn-secondary dropdown-toggle col" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              Additional Filters
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+              
+              <% for(let location of locationList){ %>
+                <label class="list-group-item">
+                  <input class="form-check-input me-1" type="checkbox" value="<%= location %>">
+                  <%= location %>
+                </label>
+                <% } %> 
+            </ul>
+          </div>
+          <div class="col-12 col-md">
+            <select class="form-select" aria-label="Location" name="location">
+              <option value="1" selected>Anywhere in the maldives</option>
+              <% for(let location of locationList){ %>
+              <option value="<%= location %>"><%= location %></option>
+              <% } %> 
+            </select>
+          </div>
+          <button class="btn btn-outline-success my-2 my-sm-0 col-1 order-1" type="submit">Search</button>
+      </form>
+    </nav>
+  </div>

@@ -1,0 +1,15 @@
+<!-- SCROLL PRODUCTS -->
+<div class="scroll-products">
+  <div class="row d-flex align-items-baseline flex-nowrap overflow-hidden">
+    <% for(let cat of productSumList){ %> <% if(cat.count){ %>
+    <a href="/products?category=<%= cat.name %>" class="col align-items-center">
+      <img
+        src="/images/<%= cat.name %>.png"
+        alt=""
+        class="img-fluid"
+      />
+      <span><%= cat.name %> (<%= cat.count %>)</span></a
+    >
+    <% } %> <% } %>
+  </div>
+</div>
