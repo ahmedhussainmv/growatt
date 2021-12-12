@@ -1,4 +1,5 @@
 {
+  "homepage": "https://ahmedhussainmv.github.io/growatt",
   "name": "growatt",
   "version": "1.0.0",
   "main": "index.js",
@@ -15,11 +16,14 @@
     "nodemon": "^2.0.12"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
-  "devDependencies": {}
+  "devDependencies": {
+    "gh-pages": "^3.2.3"
+  }
 }
