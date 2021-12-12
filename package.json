@@ -21,13 +21,5 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ahmedhussainmv/growatt.git"
-  },
-  "bugs": {
-    "url": "https://github.com/ahmedhussainmv/growatt/issues"
-  },
-  "homepage": "https://github.com/ahmedhussainmv/growatt#readme"
+  "devDependencies": {}
 }
