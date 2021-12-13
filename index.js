@@ -106,8 +106,6 @@ async function getLogin() {
   });
   return login;
 }
->>>>>>> dd6d382f33e45b1dedfe5ec22e934a3bb021ff42
-
 
 //growatt home
 app.get("", (req, res, next) => {
