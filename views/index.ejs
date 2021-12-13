@@ -1,0 +1,58 @@
+<% layout("layouts/default") -%> 
+
+<div class="container-fluid" style="max-width: 1200px">
+  <div class="row mt-2 mb-2">
+    <div class="col">
+      <div class="card text-center p-2">
+        <h3>Solar Statistics for <span id="plant-name"></span></h3>
+        <h5>
+          <span id="plant-island"></span> / <span id="plant-country"></span>
+        </h5>
+        <p>Since <span id="created-date"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row my-4">
+    <div class="col">
+      <div class="card bg-warning">
+        <div class="card-header h3">Today</div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex justify-content-between">
+            Energy: <span id="etoday" class="h1"></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between">
+            Savings: <span id="mtoday" class="h1"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card bg-success">
+        <div class="card-header h3">Total</div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex justify-content-between">
+            Energy: <span id="etotal" class="h1"></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between">
+            Savings: <span id="mtotal" class="h1"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col" style="height: 50vh">
+      <canvas class="card p-4" id="myChart"></canvas>
+      <p>Last updated : <span id="last-updated"></span></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  let dataTimestamp = `<%= timestamp %>`
+  const UPDATE_INTERVAL = Number(`<%= UPDATE_INTERVAL %>`) * 1.25;
+</script>
+<script src="/js/axios.js"></script>
+

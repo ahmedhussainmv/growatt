@@ -2,12 +2,11 @@ require("dotenv").config({ path: "./config.env" });
 const PORT = process.env.PORT;
 const MONGO_URI = process.env.MONGO_URI;
 const express = require("express");
+const mongoose = require("mongoose");
 const path = require("path");
 const ejsMate = require("ejs-mate");
-// const fetch = require("node-fetch");
-
 const session = require("express-session");
-const flash = require("connect-flash");
+
 const appName = "Growatt";
 
 const {growattInitialize, getLogin, getGrowattDb, getAll} = require('./utils/exports')
@@ -25,31 +24,24 @@ const {growattInitialize, getLogin, getGrowattDb, getAll} = require('./utils/exp
 // });
 
 const app = express();
-// const methodOverride = require("method-override");
 
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.urlencoded({ extended: true }));
-// app.use(methodOverride("_method"));
 app.use(
   session({ secret: "customSecret", resave: false, saveUninitialized: false })
 );
-app.use(flash());
-
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 
 //middleware for all routes
 app.use(async (req, res, next) => {
+  res.locals.appName = appName
   res.locals.user_id = req.session.user_id ? req.session.user_id : "";
   res.locals.todayIs = new Date().getDate();
   res.locals.timestamp = new Date();
   res.locals.UPDATE_INTERVAL = process.env.UPDATE_INTERVAL;
   res.locals.PORT = process.env.PORT;
-  res.locals.success = req.flash("success");
-  res.locals.failure = req.flash("failure");
-  res.locals.infoMessage = req.flash("infoMessage");
-  res.locals.errorMessage = req.flash("errorMessage");
   next();
 });
 
@@ -58,7 +50,7 @@ app.use(async (req, res, next) => {
 //growatt home
 app.get("", (req, res, next) => {
   const ddb = getGrowattDb();
-  res.render("growatt", {ddb,
+  res.render("index", {ddb,
     page: { title: `Growatt - ${appName}`, refreshInSeconds: 0 },
   });
 });
