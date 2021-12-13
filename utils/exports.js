@@ -86,8 +86,8 @@ async function getLogin () {
   console.log("LOGIN SUCCESS:", login);
   return login;
 }
-
 exports.getLogin = getLogin;
+
 exports.getGrowattDb = function () {
   return {
       data: db.data.slice(-5),
@@ -100,7 +100,8 @@ exports.growattInitialize = function () {
   setTimeout(growattUpdate, UPDATE_INTERVAL);
 }
 
-exports.getAll = async function () {
+
+async function getAll () {
 	if (!login) {
 		await getLogin();
 	}
@@ -114,3 +115,4 @@ exports.getAll = async function () {
 		console.log(e);
 	}))['213449']['devices']['XCB7904093']['totalData'];
 }
+exports.getAll = getAll;
