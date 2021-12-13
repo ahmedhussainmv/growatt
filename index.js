@@ -53,6 +53,60 @@ app.use(async (req, res, next) => {
 });
 
 
+<<<<<<< HEAD
+=======
+//time ranges
+function getLabels(){
+  var x = 5; //minutes interval
+  var times = []; // time array
+  var tt = 6; // start time
+  var ap = ['AM', 'PM']; // AM-PM
+
+  //loop to increment the time and push results in array
+  for (var i=0;tt<(18*60)+5; i++) {
+  var hh = Math.floor(tt/60); // getting hours of day in 0-24 format
+  var mm = (tt%60); // getting minutes of the hour in 0-55 format
+  // times[i] = ("0" + (hh % 12)).slice(-2) + ':' + ("0" + mm).slice(-2) + ap[Math.floor(hh/12)]; // pushing data in array in [00:00 - 12:00 AM/PM format]
+  times[i] = hh + ':' + mm;
+  }
+  return(times);
+}
+
+//growatt
+("use strict");
+const api = require("growatt");
+const { stat } = require("fs");
+const user = "#######";
+const passwort = "########";
+const options = {};
+const options2 = {
+  totalData: false,
+  plantData: true,
+  weather: false,
+  deviceData: false,
+  historyLast: false,
+};
+const growatt = new api({});
+let login = null;
+const db = {
+  plantInfo: {
+    plantName: "",
+    plantIsland: "",
+    plantCountry: "",
+    createdDate: "",
+  },
+  data: [],
+};
+let keepUpdating = true;
+let updateInterval = 60000;
+
+async function getLogin() {
+  login = await growatt.login(user, passwort).catch((e) => {
+    console.log(e);
+  });
+  return login;
+}
+>>>>>>> dd6d382f33e45b1dedfe5ec22e934a3bb021ff42
 
 
 //growatt home
