@@ -1,6 +1,6 @@
 require('dotenv').config({ path: './config.env' });
 ('use strict');
-const PLANT_ID = process.env.PLANT_ID;
+// const PLANT_ID = process.env.PLANT_ID;
 const GROWATT_USERNAME = process.env.GROWATT_USERNAME;
 const GROWATT_PASSWORD = process.env.GROWATT_PASSWORD;
 const UPDATE_INTERVAL = process.env.UPDATE_INTERVAL;
@@ -49,12 +49,14 @@ async function growattUpdate() {
 		await getLogin();
 	}
 	let getAllPlantData = await growatt.getAllPlantData(options).catch((e) => {
-		console.log(e);
+		console.log('ERROR getAllPlantData:', e);
 	});
-	console.log(getAllPlantData);
+	PLANT_ID = Object.keys(getAllPlantData)[0];
+
 	try {
 		const response = getAllPlantData[PLANT_ID]['plantData'];
-		const plantData = getAll();
+		const plantData = await getAll();
+		console.log(plantData)
 		if (response) {
 			let data = {
 				dateTime: String(String(new Date()).split(' ')[4]).substr(0, 4),
@@ -104,18 +106,19 @@ async function getAll() {
 	if (!login) {
 		await getLogin();
 	}
-	return (
-		await growatt
-			.getAllPlantData({
-				totalData: true,
-				plantData: false,
-				weather: false,
-				deviceData: false,
-				historyLast: false,
-			})
-			.catch((e) => {
-				console.log(e);
-			})
-	)['213449']['devices']['XCB7904093']['totalData'];
+	let response = await growatt
+		.getAllPlantData({
+			totalData: true,
+			plantData: false,
+			weather: false,
+			deviceData: false,
+			historyLast: false,
+		})
+		.catch((e) => {
+			console.log(e);
+		});
+	PLANT_ID = Object.keys(response)[0];
+	DEVICE_ID = Object.keys(response[PLANT_ID]['devices'])[0];
+	return response[PLANT_ID]['devices'][DEVICE_ID]['totalData']
 }
 exports.getAll = getAll;
