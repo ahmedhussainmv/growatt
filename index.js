@@ -75,8 +75,8 @@ function getLabels(){
 ("use strict");
 const api = require("growatt");
 const { stat } = require("fs");
-const user = "Aneel Hira";
-const passwort = "Solar@Hira";
+const user = "#######";
+const passwort = "########";
 const options = {};
 const options2 = {
   totalData: false,
