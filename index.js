@@ -1,3 +1,5 @@
+require("dotenv").config({ path: "./config.env" });
+const PORT = process.env.PORT;
 const express = require("express");
 const path = require("path");
 const ejsMate = require("ejs-mate");
@@ -7,7 +9,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const appName = "Growatt";
 
-const {growattUpdater} = require('.utils/growattUpdater')
+const {growattInitialize, getLogin, getGrowattDb, getAll} = require('./utils/exports')
 
 // mongoose.connect("mongodb://localhost:27017/growatt", {
 //   useNewUrlParser: true,
@@ -41,7 +43,8 @@ app.use(async (req, res, next) => {
   res.locals.user_id = req.session.user_id ? req.session.user_id : "";
   res.locals.todayIs = new Date().getDate();
   res.locals.timestamp = new Date();
-  res.locals.updateInterval = updateInterval;
+  res.locals.UPDATE_INTERVAL = process.env.UPDATE_INTERVAL;
+  res.locals.PORT = process.env.PORT;
   res.locals.success = req.flash("success");
   res.locals.failure = req.flash("failure");
   res.locals.infoMessage = req.flash("infoMessage");
@@ -49,85 +52,30 @@ app.use(async (req, res, next) => {
   next();
 });
 
-app.get("/", (req, res, next) => {
-  req.flash("infoMessage", "Welcome!");
-  return res.redirect("/growatt");
-});
 
-//time ranges
-function getLabels(){
-  var x = 5; //minutes interval
-  var times = []; // time array
-  var tt = 6; // start time
-  var ap = ['AM', 'PM']; // AM-PM
 
-  //loop to increment the time and push results in array
-  for (var i=0;tt<(18*60)+5; i++) {
-  var hh = Math.floor(tt/60); // getting hours of day in 0-24 format
-  var mm = (tt%60); // getting minutes of the hour in 0-55 format
-  // times[i] = ("0" + (hh % 12)).slice(-2) + ':' + ("0" + mm).slice(-2) + ap[Math.floor(hh/12)]; // pushing data in array in [00:00 - 12:00 AM/PM format]
-  times[i] = hh + ':' + mm;
-  }
-  return(times);
-}
-
-//growatt
-("use strict");
-const api = require("growatt");
-const { stat } = require("fs");
-const user = "Aneel Hira";
-const passwort = "Solar@Hira";
-const options = {};
-const options2 = {
-  totalData: false,
-  plantData: true,
-  weather: false,
-  deviceData: false,
-  historyLast: false,
-};
-const growatt = new api({});
-let login = null;
-const db = {
-  plantInfo: {
-    plantName: "",
-    plantIsland: "",
-    plantCountry: "",
-    createdDate: "",
-  },
-  data: [],
-};
-let keepUpdating = true;
-let updateInterval = 60000;
-
-async function getLogin() {
-  login = await growatt.login(user, passwort).catch((e) => {
-    console.log(e);
-  });
-  return login;
-}
-
-growattUpdater()
 
 //growatt home
-app.get("/growatt", (req, res, next) => {
-  res.render("growatt", {
-    db: {
-      data: db.data.slice(-5),
-      plantInfo: db.plantInfo,
-    },
+app.get("", (req, res, next) => {
+  const ddb = getGrowattDb();
+  res.render("growatt", {ddb,
     page: { title: `Growatt - ${appName}`, refreshInSeconds: 0 },
   });
 });
 
 //growatt api
-app.get("/api/growatt", async (req, res, next) => {
+app.get("/api", async (req, res, next) => {
+  const ddb = getGrowattDb();
   res.json({
     db: {
-      data: db.data.slice(-5),
-      plantInfo: db.plantInfo,
+      data: ddb.data.slice(-5),
+      plantInfo: ddb.plantInfo,
     },
     timestamp: new Date().getTime(),
   });
+});
+app.get("/all", async (req, res, next) => {
+  res.json(await getAll())
 });
 
 //login
@@ -156,6 +104,8 @@ app.use((err, req, res, next) => {
   //res.render("error", { errorMessage: err.message, page: { title: `EZApp - Something went wrong!` } });
 });
 
-app.listen(3000, () => {
-  console.log("RUNNING localhost:3000");
+app.listen(PORT, () => {
+  console.log(`Growatt RUNNING on localhost:${PORT}`);
+  growattInitialize()
 });
+

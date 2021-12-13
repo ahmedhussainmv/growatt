@@ -106,11 +106,11 @@
 
   //chart
   const myChart = new Chart(document.getElementById("myChart"), config);
-  const updateInterval = Number(`<%= updateInterval %>`) * 1.25;
+  const UPDATE_INTERVAL = Number(`<%= UPDATE_INTERVAL %>`) * 1.25;
 
   function fetchAndUpdate() {
     axios
-      .get("http://localhost:3000/api/growatt", { timeout: 30000 })
+      .get(`/api`, { timeout: 30000 })
       .then((res) => {
         removeData(myChart);
         res.data.db.data.forEach((element) => {
@@ -136,7 +136,7 @@
         document.querySelector("#created-date").innerHTML =
           res.data.db.plantInfo.createdDate;
       });
-    setTimeout(fetchAndUpdate, updateInterval);
+    setTimeout(fetchAndUpdate, UPDATE_INTERVAL);
   }
 
   $(document).ready(function () {
